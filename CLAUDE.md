@@ -82,7 +82,7 @@ Cancellation probability per booking, summed per arrival date, gives expected re
 ## 8. Environment
 - Windows 11, shell PowerShell/Git Bash, Python 3.14.6. Installed: pandas 2.3.3, numpy 2.5.2, scikit-learn 1.9.0, matplotlib 3.11.1, scipy 1.18.0, seaborn 0.13.2 (installed in Step 1), svglib 2.3.0 (installed in Step 2 with Mitansh's approval), reportlab 5.0.1, pypdf, pypdfium2, jupyter, nbformat 5.11.1, nbclient 0.11.0, ipykernel 7.4.0. nbconvert is NOT installed.
 - Do not run Python with `-I` here: pandas etc. live in user site-packages, which isolated mode ignores ("No module named pandas").
-- Git: branch `main`, no commits yet; `.gitignore` contains `data/`. Do not commit or push unless asked.
+- Git: branch `main`, remote `origin` = https://github.com/mitanshkanani/hotel-booking-cancellation-ml.git (pushed after Step 3). `.gitignore` ignores `data/`, `__pycache__/`, `.ipynb_checkpoints/` (raw and clean CSVs are never committed). Commit/push only when Mitansh asks (he asked for it after Step 3). `gh` CLI is not installed; plain `git push` works. Beware: `.gitignore` has no guaranteed trailing newline issues - rewrite it whole instead of appending.
 
 ## 9. Folder structure
 ```
