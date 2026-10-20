@@ -1,0 +1,7 @@
+rule,rows_flagged,additional_unique_rows_removed
+zero guests (adults+children+babies = 0),180,180
+zero nights (weekend+week nights = 0),715,645
+negative adr,1,1
+adr > 1000 (the 5400 row),1,1
+adults >= 5,16,16
+children >= 4 or babies >= 3,3,3

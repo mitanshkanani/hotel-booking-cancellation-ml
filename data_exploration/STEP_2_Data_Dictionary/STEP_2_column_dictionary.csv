@@ -1,0 +1,33 @@
+column,dtype,missing,missing_pct,n_unique,example,verdict,reason
+hotel,object,0,0.0,2,Resort Hotel,USABLE,Chosen at booking. Two values.
+is_canceled,int64,0,0.0,2,0,TARGET,"Classification target. 1 includes both Canceled (43,017) and No-Show (1,207)."
+lead_time,int64,0,0.0,479,342,USABLE,"Known at booking. Skewed, max 737 days; check outliers in EDA."
+arrival_date_year,int64,0,0.0,3,2015,NEEDS CARE,Only 2015-2017. A model cannot generalise to a year it never saw; decide how to split by time.
+arrival_date_month,object,0,0.0,12,July,USABLE,Known at booking. Text month names need ordering/encoding.
+arrival_date_week_number,int64,0,0.0,53,27,NEEDS CARE,"Overlaps with month: redundant information, check correlation."
+arrival_date_day_of_month,int64,0,0.0,31,1,USABLE,"Known at booking, probably weak alone."
+stays_in_weekend_nights,int64,0,0.0,17,0,NEEDS CARE,"Planned stay known at booking, but max 19 and zero-night stays exist (Step 3)."
+stays_in_week_nights,int64,0,0.0,35,0,NEEDS CARE,"Planned stay known at booking, but max 50 and zero-night stays exist (Step 3)."
+adults,int64,0,0.0,14,2,NEEDS CARE,"Known at booking, but zero-adult rows and max 55 exist (Step 3)."
+children,float64,4,0.0,5,0.0,NEEDS CARE,"4 missing values (stored as NaN, hence float)."
+babies,int64,0,0.0,5,0,USABLE,Known at booking. Max 10 looks odd; check in Step 3.
+meal,object,0,0.0,5,BB,NEEDS CARE,"'Undefined' (1,169 rows) is a disguised missing value."
+country,object,488,0.41,177,PRT,NEEDS CARE,488 missing; 177 distinct values (high cardinality); PRT is about 41% of rows.
+market_segment,object,0,0.0,8,Direct,NEEDS CARE,'Undefined' appears in 2 rows; overlaps with distribution_channel.
+distribution_channel,object,0,0.0,5,Direct,NEEDS CARE,'Undefined' appears in 5 rows; overlaps with market_segment.
+is_repeated_guest,int64,0,0.0,2,0,USABLE,"Guest history, known at booking."
+previous_cancellations,int64,0,0.0,15,0,USABLE,"Guest history, known at booking. Heavily skewed; any previous cancellation -> 91.6% cancel (strong but legitimate)."
+previous_bookings_not_canceled,int64,0,0.0,73,0,USABLE,"Guest history, known at booking. Heavily skewed."
+reserved_room_type,object,0,0.0,10,C,USABLE,Chosen at booking time.
+assigned_room_type,object,0,0.0,12,C,LEAKAGE,Assigned at check-in. Room changed -> 5.4% cancel vs 41.6%: a room can only be reassigned for guests who arrive.
+booking_changes,int64,0,0.0,21,3,NEEDS CARE,LEAKAGE SUSPECT: final count includes changes made after booking (always 0 at booking time). Test by ablation.
+deposit_type,object,0,0.0,3,No Deposit,NEEDS CARE,Non Refund shows 99.36% cancellation: opposite of common sense. Investigate before trusting.
+agent,float64,16340,13.69,333,304.0,NEEDS CARE,"13.69% missing; these are IDs (333 distinct), not quantities. Missing may mean ""no agent""."
+company,float64,112593,94.31,352,110.0,NEEDS CARE,"94.31% missing; IDs, not quantities. Likely reduce to a has-company flag or drop."
+days_in_waiting_list,int64,0,0.0,128,0,NEEDS CARE,LEAKAGE SUSPECT on timing: known only after the waiting period. Waiting>0 -> 63.8% cancel.
+customer_type,object,0,0.0,4,Transient,USABLE,Known at booking. Four values.
+adr,float64,0,0.0,8879,0.0,NEEDS CARE,"Regression TARGET. As a feature for cancellation it is quoted at booking, but has min -6.38 and max 5400."
+required_car_parking_spaces,int64,0,0.0,5,0,LEAKAGE,"All 7,416 bookings with 1+ spaces have 0 cancellations (exactly 0.00%): parking is only recorded for guests who arrive."
+total_of_special_requests,int64,0,0.0,6,0,NEEDS CARE,"Requests can be added after booking (timing suspect). 0 requests -> 47.7% cancel, 3+ -> 16.8%: a gradual pattern, not a perfect split."
+reservation_status,object,0,0.0,3,Check-Out,LEAKAGE,Canceled/No-Show map exactly to is_canceled = 1. It IS the answer.
+reservation_status_date,object,0,0.0,926,2015-07-01,LEAKAGE,For Canceled rows it is the cancellation date; for Check-Out rows it equals departure date (99.96%).

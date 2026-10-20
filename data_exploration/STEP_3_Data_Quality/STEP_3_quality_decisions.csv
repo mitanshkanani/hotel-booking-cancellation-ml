@@ -1,0 +1,21 @@
+issue,rows,decision,reason,applied_in
+Full-row duplicates (2nd+ copies),31994,KEEP all rows,Concentrated in Groups (84% of rows) and Offline TA/TO (50%): looks like real batch bookings. Dropping would remove real behaviour. Risk: copies in both train and test inflate the score.,Step 6: group-aware split (identical-feature bookings stay on one side); sensitivity test with duplicates dropped
+Feature-identical bookings with different outcomes,2107,KEEP,About 1.8% of rows: irreducible label noise that limits the best possible score.,Step 8: remember when judging model scores
+Zero guests,180,DROP,Not a real stay.,Step 3 (clean_v1)
+Zero nights,715,DROP,Not an overnight stay; adr = 0 for all (price undefined).,Step 3 (clean_v1)
+Negative adr,1,DROP,Price cannot be negative.,Step 3 (clean_v1)
+adr = 5400,1,DROP,Ten times the next highest value.,Step 3 (clean_v1)
+5+ adults,16,DROP,All adr = 0 and all cancelled: placeholder-like.,Step 3 (clean_v1)
+4+ children or 3+ babies,3,DROP,Implausible counts.,Step 3 (clean_v1)
+adr = 0 with nights > 0,1244,"KEEP for classification, EXCLUDE from regression",Complementary segment: 91.5% of its rows have adr 0 (free stays by design). Others unexplained. A free stay is a real booking but not a price.,Step 6: regression uses adr > 0 only
+adults = 0 but children/babies present,223,KEEP,0.19% of rows; low impact. Revisit if errors concentrate here.,-
+adr > 300 (but not the 5400 row),275,KEEP,Plausible peak or suite prices (99th percentile is about 250-280).,Step 8: RMSE is sensitive to these; consider log(adr)
+lead_time >= 500,481,KEEP,"Real, and a strong signal (85.7% cancel).",Step 6: maybe log or cap for linear models
+total_nights >= 15,439,KEEP,Long stays are plausible.,-
+days_in_waiting_list >= 200,227,KEEP,Plausible; the column is excluded from the main model anyway (Step 2).,-
+Missing: company (94.31%),112593,PLAN: has_company flag,IDs; almost empty.,Step 6
+Missing: agent (13.69%),16340,"PLAN: category ""no agent""",IDs; missing probably means no agent.,Step 6
+Missing: country (0.41%),488,"PLAN: category ""Unknown""",Small gap.,Step 6
+Missing: children (4 rows),4,PLAN: fill with 0,Median is 0; only 4 rows.,Step 6 (fit on training data only)
+Undefined: meal,1169,PLAN: merge with SC,Documentation says both mean no meal package.,Step 6
+"Undefined: market_segment, distribution_channel",7,PLAN: keep as its own category,Only a handful of rows.,Step 6
